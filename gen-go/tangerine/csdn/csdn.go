@@ -516,10 +516,432 @@ func (p *SaveArticleResponse) String() string {
   return fmt.Sprintf("SaveArticleResponse(%+v)", *p)
 }
 
+// Attributes:
+//  - Content
+type ArticleInfo struct {
+  Content string `thrift:"content,1,required" db:"content" json:"content"`
+}
+
+func NewArticleInfo() *ArticleInfo {
+  return &ArticleInfo{}
+}
+
+
+func (p *ArticleInfo) GetContent() string {
+  return p.Content
+}
+func (p *ArticleInfo) Read(ctx context.Context, iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+  var issetContent bool = false;
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin(ctx)
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.STRING {
+        if err := p.ReadField1(ctx, iprot); err != nil {
+          return err
+        }
+        issetContent = true
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(ctx); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  if !issetContent{
+    return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("Required field Content is not set"));
+  }
+  return nil
+}
+
+func (p *ArticleInfo)  ReadField1(ctx context.Context, iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(ctx); err != nil {
+  return thrift.PrependError("error reading field 1: ", err)
+} else {
+  p.Content = v
+}
+  return nil
+}
+
+func (p *ArticleInfo) Write(ctx context.Context, oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin(ctx, "ArticleInfo"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(ctx, oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(ctx); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(ctx); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *ArticleInfo) writeField1(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin(ctx, "content", thrift.STRING, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:content: ", p), err) }
+  if err := oprot.WriteString(ctx, string(p.Content)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.content (1) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:content: ", p), err) }
+  return err
+}
+
+func (p *ArticleInfo) Equals(other *ArticleInfo) bool {
+  if p == other {
+    return true
+  } else if p == nil || other == nil {
+    return false
+  }
+  if p.Content != other.Content { return false }
+  return true
+}
+
+func (p *ArticleInfo) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("ArticleInfo(%+v)", *p)
+}
+
+// Attributes:
+//  - ArticleId
+//  - Base
+type GetArticleRequest struct {
+  ArticleId int64 `thrift:"articleId,1,required" db:"articleId" json:"articleId"`
+  // unused fields # 2 to 254
+  Base *base.RPCRequest `thrift:"Base,255" db:"Base" json:"Base,omitempty"`
+}
+
+func NewGetArticleRequest() *GetArticleRequest {
+  return &GetArticleRequest{}
+}
+
+
+func (p *GetArticleRequest) GetArticleId() int64 {
+  return p.ArticleId
+}
+var GetArticleRequest_Base_DEFAULT *base.RPCRequest
+func (p *GetArticleRequest) GetBase() *base.RPCRequest {
+  if !p.IsSetBase() {
+    return GetArticleRequest_Base_DEFAULT
+  }
+return p.Base
+}
+func (p *GetArticleRequest) IsSetBase() bool {
+  return p.Base != nil
+}
+
+func (p *GetArticleRequest) Read(ctx context.Context, iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+  var issetArticleId bool = false;
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin(ctx)
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.I64 {
+        if err := p.ReadField1(ctx, iprot); err != nil {
+          return err
+        }
+        issetArticleId = true
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    case 255:
+      if fieldTypeId == thrift.STRUCT {
+        if err := p.ReadField255(ctx, iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(ctx); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  if !issetArticleId{
+    return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("Required field ArticleId is not set"));
+  }
+  return nil
+}
+
+func (p *GetArticleRequest)  ReadField1(ctx context.Context, iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadI64(ctx); err != nil {
+  return thrift.PrependError("error reading field 1: ", err)
+} else {
+  p.ArticleId = v
+}
+  return nil
+}
+
+func (p *GetArticleRequest)  ReadField255(ctx context.Context, iprot thrift.TProtocol) error {
+  p.Base = &base.RPCRequest{}
+  if err := p.Base.Read(ctx, iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Base), err)
+  }
+  return nil
+}
+
+func (p *GetArticleRequest) Write(ctx context.Context, oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin(ctx, "GetArticleRequest"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(ctx, oprot); err != nil { return err }
+    if err := p.writeField255(ctx, oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(ctx); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(ctx); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GetArticleRequest) writeField1(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin(ctx, "articleId", thrift.I64, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:articleId: ", p), err) }
+  if err := oprot.WriteI64(ctx, int64(p.ArticleId)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.articleId (1) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:articleId: ", p), err) }
+  return err
+}
+
+func (p *GetArticleRequest) writeField255(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if p.IsSetBase() {
+    if err := oprot.WriteFieldBegin(ctx, "Base", thrift.STRUCT, 255); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 255:Base: ", p), err) }
+    if err := p.Base.Write(ctx, oprot); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Base), err)
+    }
+    if err := oprot.WriteFieldEnd(ctx); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 255:Base: ", p), err) }
+  }
+  return err
+}
+
+func (p *GetArticleRequest) Equals(other *GetArticleRequest) bool {
+  if p == other {
+    return true
+  } else if p == nil || other == nil {
+    return false
+  }
+  if p.ArticleId != other.ArticleId { return false }
+  if !p.Base.Equals(other.Base) { return false }
+  return true
+}
+
+func (p *GetArticleRequest) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GetArticleRequest(%+v)", *p)
+}
+
+// Attributes:
+//  - ArticleInfo
+//  - Base
+type GetArticleResponse struct {
+  ArticleInfo *ArticleInfo `thrift:"articleInfo,1" db:"articleInfo" json:"articleInfo,omitempty"`
+  // unused fields # 2 to 254
+  Base *base.RPCResponse `thrift:"Base,255,required" db:"Base" json:"Base"`
+}
+
+func NewGetArticleResponse() *GetArticleResponse {
+  return &GetArticleResponse{}
+}
+
+var GetArticleResponse_ArticleInfo_DEFAULT *ArticleInfo
+func (p *GetArticleResponse) GetArticleInfo() *ArticleInfo {
+  if !p.IsSetArticleInfo() {
+    return GetArticleResponse_ArticleInfo_DEFAULT
+  }
+return p.ArticleInfo
+}
+var GetArticleResponse_Base_DEFAULT *base.RPCResponse
+func (p *GetArticleResponse) GetBase() *base.RPCResponse {
+  if !p.IsSetBase() {
+    return GetArticleResponse_Base_DEFAULT
+  }
+return p.Base
+}
+func (p *GetArticleResponse) IsSetArticleInfo() bool {
+  return p.ArticleInfo != nil
+}
+
+func (p *GetArticleResponse) IsSetBase() bool {
+  return p.Base != nil
+}
+
+func (p *GetArticleResponse) Read(ctx context.Context, iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+  var issetBase bool = false;
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin(ctx)
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.STRUCT {
+        if err := p.ReadField1(ctx, iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    case 255:
+      if fieldTypeId == thrift.STRUCT {
+        if err := p.ReadField255(ctx, iprot); err != nil {
+          return err
+        }
+        issetBase = true
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(ctx); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  if !issetBase{
+    return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("Required field Base is not set"));
+  }
+  return nil
+}
+
+func (p *GetArticleResponse)  ReadField1(ctx context.Context, iprot thrift.TProtocol) error {
+  p.ArticleInfo = &ArticleInfo{}
+  if err := p.ArticleInfo.Read(ctx, iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.ArticleInfo), err)
+  }
+  return nil
+}
+
+func (p *GetArticleResponse)  ReadField255(ctx context.Context, iprot thrift.TProtocol) error {
+  p.Base = &base.RPCResponse{}
+  if err := p.Base.Read(ctx, iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Base), err)
+  }
+  return nil
+}
+
+func (p *GetArticleResponse) Write(ctx context.Context, oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin(ctx, "GetArticleResponse"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(ctx, oprot); err != nil { return err }
+    if err := p.writeField255(ctx, oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(ctx); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(ctx); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GetArticleResponse) writeField1(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if p.IsSetArticleInfo() {
+    if err := oprot.WriteFieldBegin(ctx, "articleInfo", thrift.STRUCT, 1); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:articleInfo: ", p), err) }
+    if err := p.ArticleInfo.Write(ctx, oprot); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.ArticleInfo), err)
+    }
+    if err := oprot.WriteFieldEnd(ctx); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 1:articleInfo: ", p), err) }
+  }
+  return err
+}
+
+func (p *GetArticleResponse) writeField255(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin(ctx, "Base", thrift.STRUCT, 255); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 255:Base: ", p), err) }
+  if err := p.Base.Write(ctx, oprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Base), err)
+  }
+  if err := oprot.WriteFieldEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 255:Base: ", p), err) }
+  return err
+}
+
+func (p *GetArticleResponse) Equals(other *GetArticleResponse) bool {
+  if p == other {
+    return true
+  } else if p == nil || other == nil {
+    return false
+  }
+  if !p.ArticleInfo.Equals(other.ArticleInfo) { return false }
+  if !p.Base.Equals(other.Base) { return false }
+  return true
+}
+
+func (p *GetArticleResponse) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GetArticleResponse(%+v)", *p)
+}
+
 type CSDNHandler interface {
   // Parameters:
   //  - Req
   SaveArticle(ctx context.Context, req *SaveArticleRequest) (_r *SaveArticleResponse, _err error)
+  // Parameters:
+  //  - Req
+  GetArticle(ctx context.Context, req *GetArticleRequest) (_r *GetArticleResponse, _err error)
 }
 
 type CSDNHandlerClient struct {
@@ -575,6 +997,24 @@ func (p *CSDNHandlerClient) SaveArticle(ctx context.Context, req *SaveArticleReq
   return nil, thrift.NewTApplicationException(thrift.MISSING_RESULT, "SaveArticle failed: unknown result")
 }
 
+// Parameters:
+//  - Req
+func (p *CSDNHandlerClient) GetArticle(ctx context.Context, req *GetArticleRequest) (_r *GetArticleResponse, _err error) {
+  var _args4 CSDNHandlerGetArticleArgs
+  _args4.Req = req
+  var _result6 CSDNHandlerGetArticleResult
+  var _meta5 thrift.ResponseMeta
+  _meta5, _err = p.Client_().Call(ctx, "GetArticle", &_args4, &_result6)
+  p.SetLastResponseMeta_(_meta5)
+  if _err != nil {
+    return
+  }
+  if _ret7 := _result6.GetSuccess(); _ret7 != nil {
+    return _ret7, nil
+  }
+  return nil, thrift.NewTApplicationException(thrift.MISSING_RESULT, "GetArticle failed: unknown result")
+}
+
 type CSDNHandlerProcessor struct {
   processorMap map[string]thrift.TProcessorFunction
   handler CSDNHandler
@@ -595,9 +1035,10 @@ func (p *CSDNHandlerProcessor) ProcessorMap() map[string]thrift.TProcessorFuncti
 
 func NewCSDNHandlerProcessor(handler CSDNHandler) *CSDNHandlerProcessor {
 
-  self4 := &CSDNHandlerProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
-  self4.processorMap["SaveArticle"] = &cSDNHandlerProcessorSaveArticle{handler:handler}
-return self4
+  self8 := &CSDNHandlerProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
+  self8.processorMap["SaveArticle"] = &cSDNHandlerProcessorSaveArticle{handler:handler}
+  self8.processorMap["GetArticle"] = &cSDNHandlerProcessorGetArticle{handler:handler}
+return self8
 }
 
 func (p *CSDNHandlerProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -608,12 +1049,12 @@ func (p *CSDNHandlerProcessor) Process(ctx context.Context, iprot, oprot thrift.
   }
   iprot.Skip(ctx, thrift.STRUCT)
   iprot.ReadMessageEnd(ctx)
-  x5 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
+  x9 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
   oprot.WriteMessageBegin(ctx, name, thrift.EXCEPTION, seqId)
-  x5.Write(ctx, oprot)
+  x9.Write(ctx, oprot)
   oprot.WriteMessageEnd(ctx)
   oprot.Flush(ctx)
-  return false, x5
+  return false, x9
 
 }
 
@@ -622,7 +1063,7 @@ type cSDNHandlerProcessorSaveArticle struct {
 }
 
 func (p *cSDNHandlerProcessorSaveArticle) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-  var _write_err6 error
+  var _write_err10 error
   args := CSDNHandlerSaveArticleArgs{}
   if err2 := args.Read(ctx, iprot); err2 != nil {
     iprot.ReadMessageEnd(ctx)
@@ -668,21 +1109,21 @@ func (p *cSDNHandlerProcessorSaveArticle) Process(ctx context.Context, seqId int
     if errors.Is(err2, thrift.ErrAbandonRequest) {
       return false, thrift.WrapTException(err2)
     }
-    _exc7 := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing SaveArticle: " + err2.Error())
+    _exc11 := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing SaveArticle: " + err2.Error())
     if err2 := oprot.WriteMessageBegin(ctx, "SaveArticle", thrift.EXCEPTION, seqId); err2 != nil {
-      _write_err6 = thrift.WrapTException(err2)
+      _write_err10 = thrift.WrapTException(err2)
     }
-    if err2 := _exc7.Write(ctx, oprot); _write_err6 == nil && err2 != nil {
-      _write_err6 = thrift.WrapTException(err2)
+    if err2 := _exc11.Write(ctx, oprot); _write_err10 == nil && err2 != nil {
+      _write_err10 = thrift.WrapTException(err2)
     }
-    if err2 := oprot.WriteMessageEnd(ctx); _write_err6 == nil && err2 != nil {
-      _write_err6 = thrift.WrapTException(err2)
+    if err2 := oprot.WriteMessageEnd(ctx); _write_err10 == nil && err2 != nil {
+      _write_err10 = thrift.WrapTException(err2)
     }
-    if err2 := oprot.Flush(ctx); _write_err6 == nil && err2 != nil {
-      _write_err6 = thrift.WrapTException(err2)
+    if err2 := oprot.Flush(ctx); _write_err10 == nil && err2 != nil {
+      _write_err10 = thrift.WrapTException(err2)
     }
-    if _write_err6 != nil {
-      return false, thrift.WrapTException(_write_err6)
+    if _write_err10 != nil {
+      return false, thrift.WrapTException(_write_err10)
     }
     return true, err
   } else {
@@ -690,19 +1131,109 @@ func (p *cSDNHandlerProcessorSaveArticle) Process(ctx context.Context, seqId int
   }
   tickerCancel()
   if err2 := oprot.WriteMessageBegin(ctx, "SaveArticle", thrift.REPLY, seqId); err2 != nil {
-    _write_err6 = thrift.WrapTException(err2)
+    _write_err10 = thrift.WrapTException(err2)
   }
-  if err2 := result.Write(ctx, oprot); _write_err6 == nil && err2 != nil {
-    _write_err6 = thrift.WrapTException(err2)
+  if err2 := result.Write(ctx, oprot); _write_err10 == nil && err2 != nil {
+    _write_err10 = thrift.WrapTException(err2)
   }
-  if err2 := oprot.WriteMessageEnd(ctx); _write_err6 == nil && err2 != nil {
-    _write_err6 = thrift.WrapTException(err2)
+  if err2 := oprot.WriteMessageEnd(ctx); _write_err10 == nil && err2 != nil {
+    _write_err10 = thrift.WrapTException(err2)
   }
-  if err2 := oprot.Flush(ctx); _write_err6 == nil && err2 != nil {
-    _write_err6 = thrift.WrapTException(err2)
+  if err2 := oprot.Flush(ctx); _write_err10 == nil && err2 != nil {
+    _write_err10 = thrift.WrapTException(err2)
   }
-  if _write_err6 != nil {
-    return false, thrift.WrapTException(_write_err6)
+  if _write_err10 != nil {
+    return false, thrift.WrapTException(_write_err10)
+  }
+  return true, err
+}
+
+type cSDNHandlerProcessorGetArticle struct {
+  handler CSDNHandler
+}
+
+func (p *cSDNHandlerProcessorGetArticle) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+  var _write_err12 error
+  args := CSDNHandlerGetArticleArgs{}
+  if err2 := args.Read(ctx, iprot); err2 != nil {
+    iprot.ReadMessageEnd(ctx)
+    x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err2.Error())
+    oprot.WriteMessageBegin(ctx, "GetArticle", thrift.EXCEPTION, seqId)
+    x.Write(ctx, oprot)
+    oprot.WriteMessageEnd(ctx)
+    oprot.Flush(ctx)
+    return false, thrift.WrapTException(err2)
+  }
+  iprot.ReadMessageEnd(ctx)
+
+  tickerCancel := func() {}
+  // Start a goroutine to do server side connectivity check.
+  if thrift.ServerConnectivityCheckInterval > 0 {
+    var cancel context.CancelFunc
+    ctx, cancel = context.WithCancel(ctx)
+    defer cancel()
+    var tickerCtx context.Context
+    tickerCtx, tickerCancel = context.WithCancel(context.Background())
+    defer tickerCancel()
+    go func(ctx context.Context, cancel context.CancelFunc) {
+      ticker := time.NewTicker(thrift.ServerConnectivityCheckInterval)
+      defer ticker.Stop()
+      for {
+        select {
+        case <-ctx.Done():
+          return
+        case <-ticker.C:
+          if !iprot.Transport().IsOpen() {
+            cancel()
+            return
+          }
+        }
+      }
+    }(tickerCtx, cancel)
+  }
+
+  result := CSDNHandlerGetArticleResult{}
+  if retval, err2 := p.handler.GetArticle(ctx, args.Req); err2 != nil {
+    tickerCancel()
+    err = thrift.WrapTException(err2)
+    if errors.Is(err2, thrift.ErrAbandonRequest) {
+      return false, thrift.WrapTException(err2)
+    }
+    _exc13 := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetArticle: " + err2.Error())
+    if err2 := oprot.WriteMessageBegin(ctx, "GetArticle", thrift.EXCEPTION, seqId); err2 != nil {
+      _write_err12 = thrift.WrapTException(err2)
+    }
+    if err2 := _exc13.Write(ctx, oprot); _write_err12 == nil && err2 != nil {
+      _write_err12 = thrift.WrapTException(err2)
+    }
+    if err2 := oprot.WriteMessageEnd(ctx); _write_err12 == nil && err2 != nil {
+      _write_err12 = thrift.WrapTException(err2)
+    }
+    if err2 := oprot.Flush(ctx); _write_err12 == nil && err2 != nil {
+      _write_err12 = thrift.WrapTException(err2)
+    }
+    if _write_err12 != nil {
+      return false, thrift.WrapTException(_write_err12)
+    }
+    return true, err
+  } else {
+    result.Success = retval
+  }
+  tickerCancel()
+  if err2 := oprot.WriteMessageBegin(ctx, "GetArticle", thrift.REPLY, seqId); err2 != nil {
+    _write_err12 = thrift.WrapTException(err2)
+  }
+  if err2 := result.Write(ctx, oprot); _write_err12 == nil && err2 != nil {
+    _write_err12 = thrift.WrapTException(err2)
+  }
+  if err2 := oprot.WriteMessageEnd(ctx); _write_err12 == nil && err2 != nil {
+    _write_err12 = thrift.WrapTException(err2)
+  }
+  if err2 := oprot.Flush(ctx); _write_err12 == nil && err2 != nil {
+    _write_err12 = thrift.WrapTException(err2)
+  }
+  if _write_err12 != nil {
+    return false, thrift.WrapTException(_write_err12)
   }
   return true, err
 }
@@ -908,6 +1439,204 @@ func (p *CSDNHandlerSaveArticleResult) String() string {
     return "<nil>"
   }
   return fmt.Sprintf("CSDNHandlerSaveArticleResult(%+v)", *p)
+}
+
+// Attributes:
+//  - Req
+type CSDNHandlerGetArticleArgs struct {
+  Req *GetArticleRequest `thrift:"req,1" db:"req" json:"req"`
+}
+
+func NewCSDNHandlerGetArticleArgs() *CSDNHandlerGetArticleArgs {
+  return &CSDNHandlerGetArticleArgs{}
+}
+
+var CSDNHandlerGetArticleArgs_Req_DEFAULT *GetArticleRequest
+func (p *CSDNHandlerGetArticleArgs) GetReq() *GetArticleRequest {
+  if !p.IsSetReq() {
+    return CSDNHandlerGetArticleArgs_Req_DEFAULT
+  }
+return p.Req
+}
+func (p *CSDNHandlerGetArticleArgs) IsSetReq() bool {
+  return p.Req != nil
+}
+
+func (p *CSDNHandlerGetArticleArgs) Read(ctx context.Context, iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin(ctx)
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.STRUCT {
+        if err := p.ReadField1(ctx, iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(ctx); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *CSDNHandlerGetArticleArgs)  ReadField1(ctx context.Context, iprot thrift.TProtocol) error {
+  p.Req = &GetArticleRequest{}
+  if err := p.Req.Read(ctx, iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Req), err)
+  }
+  return nil
+}
+
+func (p *CSDNHandlerGetArticleArgs) Write(ctx context.Context, oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin(ctx, "GetArticle_args"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(ctx, oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(ctx); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(ctx); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *CSDNHandlerGetArticleArgs) writeField1(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin(ctx, "req", thrift.STRUCT, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:req: ", p), err) }
+  if err := p.Req.Write(ctx, oprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Req), err)
+  }
+  if err := oprot.WriteFieldEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:req: ", p), err) }
+  return err
+}
+
+func (p *CSDNHandlerGetArticleArgs) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("CSDNHandlerGetArticleArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type CSDNHandlerGetArticleResult struct {
+  Success *GetArticleResponse `thrift:"success,0" db:"success" json:"success,omitempty"`
+}
+
+func NewCSDNHandlerGetArticleResult() *CSDNHandlerGetArticleResult {
+  return &CSDNHandlerGetArticleResult{}
+}
+
+var CSDNHandlerGetArticleResult_Success_DEFAULT *GetArticleResponse
+func (p *CSDNHandlerGetArticleResult) GetSuccess() *GetArticleResponse {
+  if !p.IsSetSuccess() {
+    return CSDNHandlerGetArticleResult_Success_DEFAULT
+  }
+return p.Success
+}
+func (p *CSDNHandlerGetArticleResult) IsSetSuccess() bool {
+  return p.Success != nil
+}
+
+func (p *CSDNHandlerGetArticleResult) Read(ctx context.Context, iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin(ctx)
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 0:
+      if fieldTypeId == thrift.STRUCT {
+        if err := p.ReadField0(ctx, iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(ctx); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(ctx); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *CSDNHandlerGetArticleResult)  ReadField0(ctx context.Context, iprot thrift.TProtocol) error {
+  p.Success = &GetArticleResponse{}
+  if err := p.Success.Read(ctx, iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
+  }
+  return nil
+}
+
+func (p *CSDNHandlerGetArticleResult) Write(ctx context.Context, oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin(ctx, "GetArticle_result"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField0(ctx, oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(ctx); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(ctx); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *CSDNHandlerGetArticleResult) writeField0(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if p.IsSetSuccess() {
+    if err := oprot.WriteFieldBegin(ctx, "success", thrift.STRUCT, 0); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err) }
+    if err := p.Success.Write(ctx, oprot); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Success), err)
+    }
+    if err := oprot.WriteFieldEnd(ctx); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err) }
+  }
+  return err
+}
+
+func (p *CSDNHandlerGetArticleResult) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("CSDNHandlerGetArticleResult(%+v)", *p)
 }
 
 

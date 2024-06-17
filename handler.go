@@ -43,3 +43,22 @@ func (m *CSDNHandler) SaveArticle(ctx context.Context, req *csdn.SaveArticleRequ
 	}
 	return
 }
+
+func (m *CSDNHandler) GetArticle(ctx context.Context, req *csdn.GetArticleRequest) (resp *csdn.GetArticleResponse, err error) {
+	resp = csdn.NewGetArticleResponse()
+	resp.Base = base.NewRPCResponse()
+	resp.Base.Code = 0
+	article, err := m.ArticleService.Get(ctx, &top.GetArticleHttpRequest{
+		ID:        fmt.Sprintf("%d", req.ArticleId),
+		ModelType: "",
+	})
+	if err != nil {
+		resp.Base.Code = -1
+		resp.Base.Message = err.Error()
+		err = nil
+		return
+	}
+	resp.ArticleInfo = csdn.NewArticleInfo()
+	resp.ArticleInfo.Content = article.MarkdownContent
+	return
+}

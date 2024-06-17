@@ -17,7 +17,16 @@ func TestCSDNHandler_SaveArticle(t *testing.T) {
 		Action:    csdn.SaveArticleAction_OnlyContent,
 		Base:      nil,
 	}
-	// 设置 SAVE_ARTICLE_URL_HEADERS 环境变量
 	resp, err := handler.SaveArticle(context.Background(), req)
+	fmt.Println(resp, err)
+}
+
+func TestCSDNHandler_GetArticle(t *testing.T) {
+	handler := NewCSDNHandler()
+	req := &csdn.GetArticleRequest{
+		ArticleId: 139729092,
+		Base:      nil,
+	}
+	resp, err := handler.GetArticle(context.Background(), req)
 	fmt.Println(resp, err)
 }
